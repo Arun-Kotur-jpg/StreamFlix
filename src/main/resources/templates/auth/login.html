@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Login')}"></head>
+<body class="sf-body sf-auth-body">
+
+<div class="sf-auth-container">
+    <div class="sf-auth-card">
+        <div class="sf-auth-header">
+            <a th:href="@{/}" class="text-decoration-none">
+                <h2 class="sf-brand mb-0">
+                    <i class="bi bi-play-circle-fill me-2"></i>Stream<span class="text-accent">Flix</span>
+                </h2>
+            </a>
+            <p class="text-muted mt-2">Sign in to continue watching</p>
+        </div>
+
+        <!-- Success Message -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i><span th:text="${success}">Success</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Logout Message -->
+        <div th:if="${message}" class="alert alert-info alert-dismissible fade show" role="alert">
+            <i class="bi bi-info-circle me-2"></i><span th:text="${message}">Message</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Error Message -->
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i><span th:text="${error}">Error</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <form th:action="@{/login}" method="post" class="sf-auth-form">
+            <div class="mb-4">
+                <label for="email" class="form-label">
+                    <i class="bi bi-envelope me-1"></i>Email Address
+                </label>
+                <input type="email" id="email" name="email" class="form-control sf-input"
+                       placeholder="Enter your email" required autofocus>
+            </div>
+
+            <div class="mb-4">
+                <label for="password" class="form-label">
+                    <i class="bi bi-lock me-1"></i>Password
+                </label>
+                <div class="input-group">
+                    <input type="password" id="password" name="password" class="form-control sf-input"
+                           placeholder="Enter your password" required>
+                    <button type="button" class="btn btn-outline-secondary sf-toggle-pw"
+                            onclick="togglePassword('password', this)">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-accent w-100 btn-lg sf-btn-submit">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+            </button>
+        </form>
+
+        <div class="sf-auth-footer">
+            <p class="mb-0">Don't have an account?
+                <a th:href="@{/register}" class="text-accent text-decoration-none fw-semibold">Sign Up</a>
+            </p>
+        </div>
+
+
+    </div>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
+<script>
+function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'bi bi-eye-slash';
+    } else {
+        input.type = 'password';
+        icon.className = 'bi bi-eye';
+    }
+}
+</script>
+
+</body>
+</html>

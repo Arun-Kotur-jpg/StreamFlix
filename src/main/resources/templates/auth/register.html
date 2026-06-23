@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Register')}"></head>
+<body class="sf-body sf-auth-body">
+
+<div class="sf-auth-container">
+    <div class="sf-auth-card">
+        <div class="sf-auth-header">
+            <a th:href="@{/}" class="text-decoration-none">
+                <h2 class="sf-brand mb-0">
+                    <i class="bi bi-play-circle-fill me-2"></i>Stream<span class="text-accent">Flix</span>
+                </h2>
+            </a>
+            <p class="text-muted mt-2">Create your free account</p>
+        </div>
+
+        <!-- Error Messages -->
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i><span th:text="${error}">Error</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${emailError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i><span th:text="${emailError}">Email Error</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${passwordError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i><span th:text="${passwordError}">Password Error</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <form th:action="@{/register}" method="post" th:object="${registerRequest}" class="sf-auth-form">
+            <div class="mb-3">
+                <label for="name" class="form-label">
+                    <i class="bi bi-person me-1"></i>Full Name
+                </label>
+                <input type="text" id="name" th:field="*{name}" class="form-control sf-input"
+                       placeholder="Enter your full name" required>
+                <div th:if="${#fields.hasErrors('name')}" class="text-danger small mt-1"
+                     th:errors="*{name}">Name error</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">
+                    <i class="bi bi-envelope me-1"></i>Email Address
+                </label>
+                <input type="email" id="email" th:field="*{email}" class="form-control sf-input"
+                       placeholder="Enter your email" required>
+                <div th:if="${#fields.hasErrors('email')}" class="text-danger small mt-1"
+                     th:errors="*{email}">Email error</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">
+                    <i class="bi bi-lock me-1"></i>Password
+                </label>
+                <div class="input-group">
+                    <input type="password" id="password" th:field="*{password}" class="form-control sf-input"
+                           placeholder="Create a password (min 6 chars)" required>
+                    <button type="button" class="btn btn-outline-secondary sf-toggle-pw"
+                            onclick="togglePassword('password', this)">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <div th:if="${#fields.hasErrors('password')}" class="text-danger small mt-1"
+                     th:errors="*{password}">Password error</div>
+            </div>
+
+            <div class="mb-4">
+                <label for="confirmPassword" class="form-label">
+                    <i class="bi bi-lock-fill me-1"></i>Confirm Password
+                </label>
+                <input type="password" id="confirmPassword" th:field="*{confirmPassword}" class="form-control sf-input"
+                       placeholder="Confirm your password" required>
+            </div>
+
+            <button type="submit" class="btn btn-accent w-100 btn-lg sf-btn-submit">
+                <i class="bi bi-person-plus me-2"></i>Create Account
+            </button>
+        </form>
+
+        <div class="sf-auth-footer">
+            <p class="mb-0">Already have an account?
+                <a th:href="@{/login}" class="text-accent text-decoration-none fw-semibold">Sign In</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
+<script>
+function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'bi bi-eye-slash';
+    } else {
+        input.type = 'password';
+        icon.className = 'bi bi-eye';
+    }
+}
+</script>
+
+</body>
+</html>

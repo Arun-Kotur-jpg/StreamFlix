@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My Watchlist')}"></head>
+<body class="sf-body">
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="sf-main">
+    <div class="container-fluid px-4 pt-5 mt-4">
+
+        <div class="sf-section-header mb-4">
+            <h2 class="text-white"><i class="bi bi-bookmark-heart me-2 text-accent"></i>My Watchlist</h2>
+            <span class="badge bg-accent fs-6" th:text="${watchlist.size()} + ' movies'">0 movies</span>
+        </div>
+
+        <!-- Flash Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i><span th:text="${success}">Success</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Watchlist Grid -->
+        <div class="row g-4" th:if="${!watchlist.isEmpty()}">
+            <div th:each="movie : ${watchlist}" class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <div class="sf-movie-card sf-grid-card sf-watchlist-card">
+                    <a th:href="@{/movies/{id}(id=${movie.movieId})}" class="text-decoration-none">
+                        <div class="sf-card-img-wrapper">
+                            <img th:src="${movie.thumbnailUrl}" th:alt="${movie.title}" class="sf-card-img"
+                                 onerror="this.src='https://placehold.co/300x450/1a1d29/666?text=No+Image'">
+                            <div class="sf-card-play-overlay">
+                                <i class="bi bi-play-circle-fill"></i>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="sf-card-body">
+                        <h6 class="sf-card-title" th:text="${movie.title}">Movie Title</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="sf-card-meta" th:text="${movie.genre}">Genre</span>
+                            <form th:action="@{/watchlist/remove/{id}(id=${movie.movieId})}" method="post">
+                                <button type="submit" class="btn btn-sm btn-outline-danger sf-remove-btn"
+                                        title="Remove from watchlist">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty Watchlist -->
+        <div th:if="${watchlist.isEmpty()}" class="text-center py-5">
+            <i class="bi bi-bookmark display-1 text-muted"></i>
+            <h4 class="text-muted mt-3">Your watchlist is empty</h4>
+            <p class="text-muted">Browse movies and add them to your watchlist to watch later.</p>
+            <a th:href="@{/search}" class="btn btn-accent mt-2">
+                <i class="bi bi-search me-2"></i>Browse Movies
+            </a>
+        </div>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
+</body>
+</html>

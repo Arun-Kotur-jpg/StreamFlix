@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Search Movies')}"></head>
+<body class="sf-body">
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="sf-main">
+    <div class="container-fluid px-4 pt-5 mt-4">
+
+        <!-- Search Header -->
+        <div class="sf-search-header mb-4">
+            <h2 class="text-white"><i class="bi bi-search me-2"></i>Browse & Search</h2>
+
+            <!-- Search Bar -->
+            <form th:action="@{/search}" method="get" class="sf-search-bar mt-3">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text sf-search-icon"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" class="form-control sf-search-input"
+                           placeholder="Search movies by title, genre, or language..."
+                           th:value="${searchQuery}" autofocus>
+                    <button type="submit" class="btn btn-accent px-4">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="sf-filters mb-4">
+            <div class="mb-3">
+                <span class="text-muted me-2 small">Genre:</span>
+                <a th:href="@{/search}" class="sf-filter-chip"
+                   th:classappend="${selectedGenre == null && searchQuery == null && selectedLanguage == null} ? 'active' : ''">All</a>
+                <a th:each="genre : ${genres}"
+                   th:href="@{/search(genre=${genre})}"
+                   class="sf-filter-chip"
+                   th:classappend="${selectedGenre != null && selectedGenre == genre} ? 'active' : ''"
+                   th:text="${genre}">Genre</a>
+            </div>
+            <div>
+                <span class="text-muted me-2 small">Language:</span>
+                <a th:each="lang : ${languages}"
+                   th:href="@{/search(language=${lang})}"
+                   class="sf-filter-chip"
+                   th:classappend="${selectedLanguage != null && selectedLanguage == lang} ? 'active' : ''"
+                   th:text="${lang}">Language</a>
+            </div>
+        </div>
+
+        <!-- Search Info -->
+        <div class="mb-3" th:if="${searchQuery}">
+            <p class="text-muted">
+                Showing results for "<span class="text-accent" th:text="${searchQuery}">query</span>"
+                — <span th:text="${movies.size()}">0</span> movies found
+            </p>
+        </div>
+        <div class="mb-3" th:if="${selectedGenre}">
+            <p class="text-muted">
+                Filtering by genre: <span class="text-accent" th:text="${selectedGenre}">genre</span>
+                — <span th:text="${movies.size()}">0</span> movies found
+            </p>
+        </div>
+        <div class="mb-3" th:if="${selectedLanguage}">
+            <p class="text-muted">
+                Filtering by language: <span class="text-accent" th:text="${selectedLanguage}">language</span>
+                — <span th:text="${movies.size()}">0</span> movies found
+            </p>
+        </div>
+
+        <!-- Results Grid -->
+        <div class="row g-4" th:if="${!movies.isEmpty()}">
+            <div th:each="movie : ${movies}" class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a th:href="@{/movies/{id}(id=${movie.movieId})}" class="text-decoration-none">
+                    <div class="sf-movie-card sf-grid-card">
+                        <div class="sf-card-img-wrapper">
+                            <img th:src="${movie.thumbnailUrl}" th:alt="${movie.title}" class="sf-card-img"
+                                 onerror="this.src='https://placehold.co/300x450/1a1d29/666?text=No+Image'">
+                            <div class="sf-card-play-overlay">
+                                <i class="bi bi-play-circle-fill"></i>
+                            </div>
+                            <span class="sf-card-rating" th:if="${movie.rating}">
+                                <i class="bi bi-star-fill"></i> <span th:text="${movie.rating}">8.5</span>
+                            </span>
+                        </div>
+                        <div class="sf-card-body">
+                            <h6 class="sf-card-title" th:text="${movie.title}">Movie Title</h6>
+                            <div class="d-flex justify-content-between">
+                                <span class="sf-card-meta" th:text="${movie.genre}">Genre</span>
+                                <span class="sf-card-meta" th:text="${movie.releaseYear}">2024</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- No Results -->
+        <div th:if="${movies.isEmpty()}" class="text-center py-5">
+            <i class="bi bi-search display-1 text-muted"></i>
+            <h4 class="text-muted mt-3">No movies found</h4>
+            <p class="text-muted">Try a different search term or filter.</p>
+            <a th:href="@{/search}" class="btn btn-outline-light">Clear Filters</a>
+        </div>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
+</body>
+</html>

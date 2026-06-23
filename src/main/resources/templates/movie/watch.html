@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Watch - ' + ${movie.title})}"></head>
+<body class="sf-body">
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="sf-main">
+    <div class="sf-watch-page">
+        <!-- Video Player -->
+        <div class="sf-video-container">
+            <video id="videoPlayer" class="sf-video-player" controls autoplay
+                   th:poster="${movie.thumbnailUrl}">
+                <source th:src="${movie.videoUrl}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Movie Info Below Player -->
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2 class="text-white mb-2" th:text="${movie.title}">Movie Title</h2>
+                    <div class="d-flex flex-wrap gap-3 mb-3">
+                        <span class="sf-detail-chip" th:if="${movie.releaseYear}">
+                            <i class="bi bi-calendar3"></i> <span th:text="${movie.releaseYear}">2024</span>
+                        </span>
+                        <span class="sf-detail-chip" th:if="${movie.duration}">
+                            <i class="bi bi-clock"></i> <span th:text="${movie.duration}">2h 15m</span>
+                        </span>
+                        <span class="sf-detail-chip" th:if="${movie.genre}">
+                            <i class="bi bi-tag"></i> <span th:text="${movie.genre}">Genre</span>
+                        </span>
+                        <span class="sf-detail-chip" th:if="${movie.rating}">
+                            <i class="bi bi-star-fill text-warning"></i> <span th:text="${movie.rating}">8.5</span>
+                        </span>
+                    </div>
+                    <p class="text-muted" th:text="${movie.description}">Description</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="sf-watch-sidebar">
+                        <a th:href="@{/movies/{id}(id=${movie.movieId})}" class="btn btn-outline-light w-100 mb-2">
+                            <i class="bi bi-info-circle me-2"></i>Movie Details
+                        </a>
+                        <a th:href="@{/}" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-house me-2"></i>Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
+</body>
+</html>

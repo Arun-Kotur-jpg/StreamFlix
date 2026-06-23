@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My Profile')}"></head>
+<body class="sf-body">
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="sf-main">
+    <div class="container pt-5 mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+
+                <div class="sf-profile-card">
+                    <!-- Avatar -->
+                    <div class="sf-profile-avatar">
+                        <div class="sf-avatar-circle">
+                            <span th:text="${user.name.substring(0,1).toUpperCase()}">U</span>
+                        </div>
+                    </div>
+
+                    <!-- User Info -->
+                    <h2 class="text-center text-white mt-3 mb-1" th:text="${user.name}">User Name</h2>
+                    <p class="text-center text-secondary mb-4" th:text="${user.email}">user@email.com</p>
+
+                    <!-- Stats -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-4">
+                            <div class="sf-stat-card text-center">
+                                <i class="bi bi-bookmark-heart text-accent fs-3"></i>
+                                <h4 class="text-white mt-2 mb-0" th:text="${watchlistCount}">0</h4>
+                                <small class="text-secondary">Watchlist</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="sf-stat-card text-center">
+                                <i class="bi bi-play-circle text-info fs-3"></i>
+                                <h4 class="text-white mt-2 mb-0" th:text="${watchedCount}">0</h4>
+                                <small class="text-secondary">Watched</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="sf-stat-card text-center">
+                                <i class="bi bi-shield-check text-success fs-3"></i>
+                                <h4 class="text-white mt-2 mb-0" th:text="${user.role}">USER</h4>
+                                <small class="text-secondary">Role</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="sf-profile-details">
+                        <div class="sf-detail-item">
+                            <span class="text-secondary"><i class="bi bi-person me-2"></i>Full Name</span>
+                            <span class="text-white" th:text="${user.name}">Name</span>
+                        </div>
+                        <div class="sf-detail-item">
+                            <span class="text-secondary"><i class="bi bi-envelope me-2"></i>Email</span>
+                            <span class="text-white" th:text="${user.email}">Email</span>
+                        </div>
+                        <div class="sf-detail-item">
+                            <span class="text-secondary"><i class="bi bi-calendar me-2"></i>Member Since</span>
+                            <span class="text-white" th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy')}">Jan 2024</span>
+                        </div>
+                        <div class="sf-detail-item">
+                            <span class="text-secondary"><i class="bi bi-shield me-2"></i>Account Type</span>
+                            <span class="badge" th:classappend="${user.role == 'ADMIN'} ? 'bg-warning text-dark' : 'bg-accent text-dark'"
+                                  th:text="${user.role}">USER</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="d-grid gap-2 mt-4">
+                        <a th:href="@{/watchlist}" class="btn btn-outline-accent">
+                            <i class="bi bi-bookmark me-2"></i>View My Watchlist
+                        </a>
+                        <a th:href="@{/search}" class="btn btn-outline-light">
+                            <i class="bi bi-search me-2"></i>Browse Movies
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
+</body>
+</html>
